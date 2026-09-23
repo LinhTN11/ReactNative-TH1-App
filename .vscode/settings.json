@@ -1,0 +1,11 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.import.exclusions": [
+        "**/node_modules/**",
+        "**/.git/**"
+    ],
+    "java.project.resourceFilters": [
+        "node_modules",
+        ".git"
+    ]
+}
