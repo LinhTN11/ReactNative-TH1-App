@@ -1,28 +1,33 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DailyForecastItem } from '../types/weather';
 import { WeatherIcon, Droplet } from './WeatherIcons';
+import { ChevronRight } from './WeatherIcons';
+import { GlassCard } from './ui/GlassCard';
 
 interface DailyForecastProps {
   daily: DailyForecastItem[];
+  onDayPress?: (dayIndex: number) => void;
 }
 
-export const DailyForecast: React.FC<DailyForecastProps> = ({ daily }) => {
+export const DailyForecast: React.FC<DailyForecastProps> = ({ daily, onDayPress }) => {
   return (
-    <View style={styles.container}>
+    <GlassCard style={styles.container}>
       <View style={styles.listContainer}>
         {daily.map((item, index) => {
           const isToday = index === 0;
-          const displayDay = isToday ? 'Today' : item.dayText;
+          const displayDay = isToday ? 'Hôm nay' : item.dayText;
           const rainProb = item.precipitationProbabilityMax ?? 0;
 
           return (
-            <View
+            <TouchableOpacity
               key={`${item.date}-${index}`}
               style={[
                 styles.dayRow,
                 index < daily.length - 1 && styles.borderBottom,
               ]}
+              onPress={() => onDayPress?.(index)}
+              activeOpacity={onDayPress ? 0.7 : 1}
             >
               {/* Day title */}
               <View style={styles.dayCol}>
@@ -56,25 +61,26 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ daily }) => {
                 <Text style={styles.maxTemp}>{item.tempMax}°</Text>
                 <Text style={styles.minTemp}>{item.tempMin}°</Text>
               </View>
-            </View>
+
+              {/* Chevron indicator */}
+              {onDayPress && (
+                <View style={styles.chevronCol}>
+                  <ChevronRight size={16} color="rgba(255, 255, 255, 0.4)" strokeWidth={2} />
+                </View>
+              )}
+            </TouchableOpacity>
           );
         })}
       </View>
-    </View>
+    </GlassCard>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 16,
     marginBottom: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.16)',
-    borderRadius: 24,
     paddingVertical: 10,
     paddingHorizontal: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
-    overflow: 'hidden',
   },
   listContainer: {
     width: '100%',
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   rainCol: {
-    width: 65,
+    width: 60,
     justifyContent: 'center',
   },
   rainInner: {
@@ -126,7 +132,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    width: 80,
+    width: 75,
   },
   maxTemp: {
     fontSize: 16,
@@ -138,5 +144,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     color: 'rgba(255, 255, 255, 0.7)',
+  },
+  chevronCol: {
+    marginLeft: 6,
   },
 });

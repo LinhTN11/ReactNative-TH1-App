@@ -1,97 +1,142 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🌤️ Weather Forecast App — React Native
 
-# Getting Started
+Ứng dụng dự báo thời tiết di động với giao diện hiện đại, sử dụng dữ liệu thực từ [Open-Meteo API](https://open-meteo.com/).
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 📸 Tính năng
 
-## Step 1: Start Metro
+### ✅ Xem thời tiết hiện tại
+- Hiển thị địa điểm (hỗ trợ geolocation thiết bị)
+- Nhiệt độ, trạng thái thời tiết (mô tả tiếng Việt)
+- Nhiệt độ cao nhất / thấp nhất / cảm nhận
+- Background hình ảnh thay đổi theo điều kiện thời tiết
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### ✅ Dự báo theo giờ (24h)
+- Cuộn ngang với icon thời tiết, nhiệt độ, khả năng mưa
+- Trend line nhiệt độ
+- Tap vào giờ để xem chi tiết đầy đủ
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### ✅ Dự báo nhiều ngày (7 ngày)
+- Danh sách ngày với icon ban ngày/đêm
+- Nhiệt độ cao/thấp + khả năng mưa
+- Tap vào ngày để xem chi tiết
 
-```sh
-# Using npm
-npm start
+### ✅ Xem thông tin chi tiết
+- Màn hình chi tiết cho ngày hoặc giờ được chọn
+- Hiển thị đầy đủ: nhiệt độ cảm nhận, độ ẩm, gió, UV, mưa, áp suất, tầm nhìn, điểm sương, mây
+- La bàn gió SVG trực quan
+- Thời gian bình minh / hoàng hôn
+- Dự báo theo giờ cho ngày được chọn
 
-# OR using Yarn
-yarn start
+### ✅ Dashboard chỉ số thời tiết
+Grid 2 cột hiển thị 6 chỉ số chính:
+- 🌡️ Nhiệt độ cảm nhận
+- 💧 Độ ẩm
+- 💨 Tốc độ gió + hướng gió
+- ☀️ Chỉ số UV (với thanh tiến trình)
+- 🌧️ Lượng mưa
+- 📊 Áp suất khí quyển
+
+### ✅ Các trạng thái UI
+- ⏳ Loading state (animated cloud + dots)
+- ❌ Error state (retry button)
+- 📭 Empty state (action button)
+
+---
+
+## 🏗️ Kiến trúc dự án
+
+```
+MyApp/
+├── App.tsx                           # Entry point (GestureHandler + SafeArea + Navigator)
+├── src/
+│   ├── assets/backgrounds/           # Background images (sunny, night, cloudy, rainy, snow, thunderstorm)
+│   ├── components/
+│   │   ├── navigation/
+│   │   │   └── AppNavigator.tsx      # React Navigation Stack
+│   │   ├── ui/
+│   │   │   ├── GlassCard.tsx         # Reusable glassmorphism card
+│   │   │   ├── LoadingState.tsx      # Animated loading indicator
+│   │   │   ├── ErrorState.tsx        # Error display + retry
+│   │   │   └── EmptyState.tsx        # Empty state + action
+│   │   ├── CurrentWeather.tsx        # Hero section: temperature, condition
+│   │   ├── HourlyForecast.tsx        # 24h horizontal scroll (tappable)
+│   │   ├── DailyForecast.tsx         # 7-day list (tappable)
+│   │   ├── WeatherMetrics.tsx        # 6-metric dashboard grid
+│   │   ├── WeatherInsightCard.tsx    # Temperature comparison card
+│   │   ├── WeatherHeader.tsx         # Location selector + refresh
+│   │   ├── CitySearchModal.tsx       # Search cities modal
+│   │   ├── WindCompass.tsx           # SVG compass for wind direction
+│   │   ├── WeatherIcons.tsx          # Core SVG icon set
+│   │   └── WeatherIconsExtra.tsx     # Extended icons (UV, pressure, etc.)
+│   ├── screens/
+│   │   ├── WeatherScreen.tsx         # Main screen (home)
+│   │   └── WeatherDetailScreen.tsx   # Detail screen (day/hour)
+│   ├── services/
+│   │   ├── weatherApi.ts             # Open-Meteo API integration
+│   │   └── locationService.ts        # Device geolocation + reverse geocode
+│   ├── types/
+│   │   └── weather.ts                # TypeScript interfaces
+│   ├── utils/
+│   │   ├── weatherCodes.ts           # WMO code → description/colors
+│   │   └── weatherBackgrounds.ts     # Weather condition → background image
+│   └── theme/
+│       └── colors.ts                 # Design system color tokens
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## 🛠️ Công nghệ sử dụng
 
-### Android
+| Tech | Version | Mục đích |
+|------|---------|----------|
+| React Native | 0.87.0 | Framework |
+| React | 19.2.3 | UI Library |
+| TypeScript | 6.x | Type safety |
+| @react-navigation/native | latest | Screen navigation |
+| @react-navigation/stack | latest | Stack navigator |
+| react-native-safe-area-context | 5.x | Safe area insets |
+| react-native-svg | 15.x | SVG icon rendering |
+| react-native-screens | latest | Native screen optimization |
+| react-native-gesture-handler | latest | Gesture support |
+| @react-native-community/geolocation | latest | Device location |
 
-```sh
-# Using npm
-npm run android
+---
 
-# OR using Yarn
-yarn android
+## 🌐 API
+
+**Open-Meteo** (https://open-meteo.com/) — Free, no API key required.
+
+### Endpoints sử dụng:
+- `/v1/forecast` — Current + hourly + daily weather data
+- `/v1/search` (geocoding) — City search
+
+### Dữ liệu lấy:
+- **Current**: temperature, humidity, wind (speed + direction + gusts), pressure, cloud cover, weather code
+- **Hourly**: temperature, weather code, precipitation probability, humidity, wind, UV, visibility, pressure, dew point, cloud cover
+- **Daily**: max/min temperature, precipitation, UV max, wind max, sunrise/sunset, apparent temperature
+
+---
+
+## 🚀 Chạy ứng dụng
+
+```bash
+# Install dependencies
+npm install
+
+# Android
+npx react-native run-android
+
+# iOS
+cd ios && pod install && cd ..
+npx react-native run-ios
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## 📋 Quy ước code
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- **Components**: PascalCase, mỗi component 1 file
+- **Services**: camelCase, xử lý API và business logic
+- **Types**: Interface cho mọi data model
+- **Utils**: Pure functions, không side effects
+- **Theme**: Centralized design tokens

@@ -4,9 +4,17 @@ export interface CurrentWeather {
   weatherCode: number;
   humidity: number;
   windSpeed: number;
+  windDirection: number;
   precipitation: number;
   isDay: boolean;
   time: string;
+  // Extended metrics
+  uvIndex?: number;
+  pressure?: number;
+  visibility?: number;
+  dewPoint?: number;
+  cloudCover?: number;
+  windGusts?: number;
 }
 
 export interface HourlyForecastItem {
@@ -16,6 +24,17 @@ export interface HourlyForecastItem {
   weatherCode: number;
   precipitationProbability: number;
   isNow?: boolean;
+  // Extended
+  humidity?: number;
+  windSpeed?: number;
+  windDirection?: number;
+  uvIndex?: number;
+  apparentTemperature?: number;
+  precipitation?: number;
+  visibility?: number;
+  pressure?: number;
+  dewPoint?: number;
+  cloudCover?: number;
 }
 
 export interface DailyForecastItem {
@@ -26,6 +45,15 @@ export interface DailyForecastItem {
   tempMin: number;
   precipitationSum: number;
   precipitationProbabilityMax?: number;
+  // Extended
+  sunrise?: string;
+  sunset?: string;
+  uvIndexMax?: number;
+  windSpeedMax?: number;
+  windDirectionDominant?: number;
+  precipitationHours?: number;
+  apparentTempMax?: number;
+  apparentTempMin?: number;
 }
 
 export interface WeatherData {
@@ -53,3 +81,13 @@ export interface WeatherTheme {
   icon: string;
   descriptionVi: string;
 }
+
+/** Navigation param list for type-safe routing */
+export type RootStackParamList = {
+  Home: undefined;
+  WeatherDetail: {
+    weatherData: WeatherData;
+    selectedDayIndex?: number;
+    selectedHourIndex?: number;
+  };
+};

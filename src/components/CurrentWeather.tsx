@@ -41,7 +41,7 @@ export const CurrentWeather: React.FC<CurrentWeatherProps> = ({ current, todayFo
 
       {/* Feels Like Text */}
       <Text style={styles.feelsLikeText}>
-        Feels like {current.apparentTemperature}°
+        Cảm giác như {current.apparentTemperature}°
       </Text>
     </View>
   );

@@ -15,11 +15,11 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Clear Sky
   if (code === 0) {
     return {
-      title: isDay ? 'Sunny' : 'Clear Night',
+      title: isDay ? 'Nắng quang đãng' : 'Đêm quang đãng',
       subtitle: isDay ? 'Trời quang đãng' : 'Trời đêm quang đãng',
       summary: isDay
-        ? 'You can see clear skies all day.'
-        : 'Clear starry night with pleasant temperature.',
+        ? 'Trời quang đãng cả ngày, tầm nhìn rất tốt.'
+        : 'Đêm quang đãng nhiều sao, thời tiết dễ chịu.',
       backgroundImage: isDay
         ? require('../assets/backgrounds/sunny.jpg')
         : require('../assets/backgrounds/night.jpg'),
@@ -30,11 +30,11 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Mainly Clear / Partly Sunny
   if (code === 1 || code === 2) {
     return {
-      title: isDay ? 'Partly Sunny' : 'Partly Cloudy',
+      title: isDay ? 'Nắng nhẹ, có mây' : 'Có mây về đêm',
       subtitle: isDay ? 'Nắng nhẹ, có mây' : 'Có mây về đêm',
       summary: isDay
-        ? 'Pleasant conditions with gentle sunshine.'
-        : 'Cool breeze with passing clouds tonight.',
+        ? 'Thời tiết dễ chịu, có nắng nhẹ chan hòa.'
+        : 'Gió nhẹ thoang thoảng với mây trôi về đêm.',
       backgroundImage: isDay
         ? require('../assets/backgrounds/sunny.jpg')
         : require('../assets/backgrounds/night.jpg'),
@@ -45,9 +45,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Overcast
   if (code === 3) {
     return {
-      title: 'Overcast',
+      title: 'Nhiều mây, u ám',
       subtitle: 'Nhiều mây, u ám',
-      summary: 'Cloudy skies prevailing throughout the region.',
+      summary: 'Mây che phủ hầu hết các khu vực trong ngày.',
       backgroundImage: require('../assets/backgrounds/cloudy.jpg'),
       overlayColor: 'rgba(0, 0, 0, 0.25)',
     };
@@ -56,9 +56,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Fog
   if (code === 45 || code === 48) {
     return {
-      title: 'Foggy',
+      title: 'Sương mù',
       subtitle: 'Sương mù',
-      summary: 'Reduced visibility due to morning mist and fog.',
+      summary: 'Tầm nhìn hạn chế do sương mù vào buổi sáng.',
       backgroundImage: require('../assets/backgrounds/cloudy.jpg'),
       overlayColor: 'rgba(0, 0, 0, 0.3)',
     };
@@ -67,9 +67,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Drizzle
   if (code >= 51 && code <= 57) {
     return {
-      title: 'Drizzle',
+      title: 'Mưa phùn',
       subtitle: 'Mưa phùn nhẹ',
-      summary: 'Light drizzle expected intermittently.',
+      summary: 'Dự báo có mưa phùn nhẹ ngắt quãng trong ngày.',
       backgroundImage: require('../assets/backgrounds/rainy.jpg'),
       overlayColor: 'rgba(0, 0, 0, 0.3)',
     };
@@ -78,9 +78,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Rain / Showers
   if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) {
     return {
-      title: 'Rain Showers',
+      title: 'Mưa rào',
       subtitle: 'Mưa rào',
-      summary: 'Rain showers likely, carry an umbrella when heading out.',
+      summary: 'Khả năng có mưa rào, hãy mang theo ô khi ra ngoài.',
       backgroundImage: require('../assets/backgrounds/rainy.jpg'),
       overlayColor: 'rgba(0, 0, 0, 0.35)',
     };
@@ -89,9 +89,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Snow
   if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) {
     return {
-      title: 'Snowfall',
+      title: 'Tuyết rơi',
       subtitle: 'Tuyết rơi',
-      summary: 'Cold temperatures with light snow falling.',
+      summary: 'Nhiệt độ xuống thấp kèm theo tuyết rơi rải rác.',
       backgroundImage: require('../assets/backgrounds/snow.jpg'),
       overlayColor: 'rgba(0, 0, 0, 0.2)',
     };
@@ -100,9 +100,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
   // Thunderstorm
   if (code >= 95) {
     return {
-      title: 'Thunderstorm',
+      title: 'Dông bão',
       subtitle: 'Dông sét',
-      summary: 'Severe thunderstorm warning in this area.',
+      summary: 'Cảnh báo có dông sét mạnh kèm mưa tại khu vực này.',
       backgroundImage: require('../assets/backgrounds/thunderstorm.jpg'),
       overlayColor: 'rgba(0, 0, 0, 0.45)',
     };
@@ -110,9 +110,9 @@ export function getWeatherDisplay(code: number, isDay: boolean = true): WeatherC
 
   // Default fallback
   return {
-    title: isDay ? 'Partly Sunny' : 'Clear Night',
+    title: isDay ? 'Nắng nhẹ, có mây' : 'Đêm quang đãng',
     subtitle: isDay ? 'Thời tiết thuận lợi' : 'Trời quang về đêm',
-    summary: 'You can see clear skies all day.',
+    summary: 'Thời tiết thuận lợi, trời quang mây tạnh.',
     backgroundImage: isDay
       ? require('../assets/backgrounds/sunny.jpg')
       : require('../assets/backgrounds/night.jpg'),

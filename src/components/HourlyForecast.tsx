@@ -1,24 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { HourlyForecastItem } from '../types/weather';
 import { WeatherIcon, Droplet, Sunset, Sunrise } from './WeatherIcons';
+import { GlassCard } from './ui/GlassCard';
 
 interface HourlyForecastProps {
   hourly: HourlyForecastItem[];
   summaryText?: string;
+  onHourPress?: (hourIndex: number) => void;
 }
 
 /**
- * Format ISO time to clean AM/PM format (e.g. 3 AM, 4 PM)
+ * Format ISO time to Vietnamese hour format (e.g. Bây giờ, 15:00)
  */
 function formatHourAmPm(timeStr: string, isNow?: boolean): string {
-  if (isNow) return 'Now';
+  if (isNow) return 'Bây giờ';
   try {
     const date = new Date(timeStr);
     const hours = date.getHours();
-    if (hours === 0) return '12 AM';
-    if (hours === 12) return '12 PM';
-    return hours > 12 ? `${hours - 12} PM` : `${hours} AM`;
+    return `${hours.toString().padStart(2, '0')}:00`;
   } catch {
     return timeStr;
   }
@@ -26,10 +26,11 @@ function formatHourAmPm(timeStr: string, isNow?: boolean): string {
 
 export const HourlyForecast: React.FC<HourlyForecastProps> = ({
   hourly,
-  summaryText = 'You can see clear skies all day.',
+  summaryText = 'Thời tiết thuận lợi, trời quang mây tạnh.',
+  onHourPress,
 }) => {
   return (
-    <View style={styles.container}>
+    <GlassCard style={styles.container}>
       {/* Top summary header text */}
       <Text style={styles.summaryText}>{summaryText}</Text>
 
@@ -48,7 +49,12 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({
           const isSunriseHour = hour === 6;
 
           return (
-            <View key={`${item.time}-${index}`} style={styles.hourCol}>
+            <TouchableOpacity
+              key={`${item.time}-${index}`}
+              style={styles.hourCol}
+              onPress={() => onHourPress?.(index)}
+              activeOpacity={onHourPress ? 0.7 : 1}
+            >
               {/* Hour time text */}
               <Text style={[styles.hourText, item.isNow && styles.nowText]}>
                 {hourLabel}
@@ -105,26 +111,19 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({
                   {item.precipitationProbability}%
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
-    </View>
+    </GlassCard>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 16,
-    marginBottom: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.16)',
-    borderRadius: 24,
     paddingTop: 18,
     paddingBottom: 16,
     paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
-    overflow: 'hidden',
   },
   summaryText: {
     fontSize: 16,

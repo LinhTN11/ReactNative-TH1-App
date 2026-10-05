@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DailyForecastItem, CurrentWeather } from '../types/weather';
 import { Thermometer, Wind, ArrowDown, ArrowUp } from './WeatherIcons';
+import { GlassCard } from './ui/GlassCard';
 
 interface WeatherInsightCardProps {
   today?: DailyForecastItem;
@@ -27,20 +28,20 @@ export const WeatherInsightCard: React.FC<WeatherInsightCardProps> = ({
 
   const getSubtitle = () => {
     if (absDiff === 0) {
-      return "Tomorrow's temperature will be similar to today.";
+      return 'Nhiệt độ ngày mai tương đương hôm nay.';
     }
     if (isLower) {
       return absDiff >= 3
-        ? "Tomorrow's temperature will be much lower than today."
-        : "Tomorrow's temperature will be slightly cooler.";
+        ? 'Nhiệt độ ngày mai sẽ giảm mạnh so với hôm nay.'
+        : 'Nhiệt độ ngày mai sẽ mát hơn hôm nay đôi chút.';
     }
     return absDiff >= 3
-      ? "Tomorrow's temperature will be significantly warmer."
-      : "Tomorrow's temperature will be slightly higher.";
+      ? 'Nhiệt độ ngày mai sẽ tăng đáng kể so với hôm nay.'
+      : 'Nhiệt độ ngày mai sẽ ấm hơn hôm nay đôi chút.';
   };
 
   return (
-    <View style={styles.container}>
+    <GlassCard style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() => setActiveTab(prev => (prev === 0 ? 1 : 0))}
@@ -52,7 +53,7 @@ export const WeatherInsightCard: React.FC<WeatherInsightCardProps> = ({
             <View style={styles.leftCol}>
               <View style={styles.tagRow}>
                 <Thermometer size={14} color="#FFFFFF" strokeWidth={2.2} />
-                <Text style={styles.tagText}>Enjoy the day...</Text>
+                <Text style={styles.tagText}>Xu hướng thời tiết</Text>
               </View>
               <Text style={styles.descriptionText} numberOfLines={2}>
                 {getSubtitle()}
@@ -75,10 +76,10 @@ export const WeatherInsightCard: React.FC<WeatherInsightCardProps> = ({
             <View style={styles.leftCol}>
               <View style={styles.tagRow}>
                 <Wind size={14} color="#FFFFFF" strokeWidth={2.2} />
-                <Text style={styles.tagText}>Air & Humidity</Text>
+                <Text style={styles.tagText}>Độ ẩm & Không khí</Text>
               </View>
               <Text style={styles.descriptionText} numberOfLines={2}>
-                Humidity is {current.humidity}% with gentle winds at {current.windSpeed} km/h.
+                Độ ẩm hiện tại {current.humidity}%, gió với vận tốc {current.windSpeed} km/h.
               </Text>
             </View>
 
@@ -95,20 +96,12 @@ export const WeatherInsightCard: React.FC<WeatherInsightCardProps> = ({
           <View style={[styles.dot, activeTab === 1 && styles.activeDot]} />
         </View>
       </TouchableOpacity>
-    </View>
+    </GlassCard>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 16,
-    marginBottom: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.16)',
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
-    overflow: 'hidden',
-  },
+  container: {},
   innerContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
